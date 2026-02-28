@@ -1,18 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Facebook, 
-  Moon, 
-  Sun, 
-  Cpu, 
-  Menu, 
-  X, 
-  Shield, 
-  Network, 
-  Settings, 
-  Lightbulb 
-} from "lucide-react";
+import { motion } from "framer-motion";
+import { Facebook, Moon, Sun, Cpu, Menu, X, Shield, Network, Settings, Lightbulb } from "lucide-react";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +15,6 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
 
-  // البيانات الخاصة بك
   const myPhoneNumber = "218911764613";
   const facebookUrl = "https://www.facebook.com/profile.php?id=61577581266079";
 
@@ -37,130 +25,115 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    if (isDark) document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
+    document.documentElement.classList.toggle('dark', isDark);
   }, [isDark]);
 
   const navColor = isScrolled ? (isDark ? "text-white" : "text-[#2358af]") : "text-white";
-  const navLinks = [
-    { name: "الرئيسية", id: "#home" },
-    { name: "من نحن", id: "#about" },
-    { name: "الخدمات", id: "#services" },
-    { name: "تواصل معنا", id: "#contact" },
-  ];
-
-  const services = [
-    { title: "تركيب الشبكات", desc: "تصميم وتنفيذ بنية تحتية قوية للشبكات السلكية واللاسلكية.", icon: <Network size={40} /> },
-    { title: "صيانة الأنظمة", desc: "حلول صيانة دورية وطارئة لضمان استمرارية عمل أنظمتك.", icon: <Settings size={40} /> },
-    { title: "الأمن السيبراني", desc: "حماية بيانات شركتك وتأمين اتصالاتك من الاختراقات.", icon: <Shield size={40} /> },
-    { title: "الاستشارات التقنية", desc: "نساعدك في اختيار أفضل التقنيات التي تناسب نمو أعمالك.", icon: <Lightbulb size={40} /> }
-  ];
 
   return (
-    <main className={`min-h-screen transition-colors duration-500 overflow-x-hidden ${isDark ? "bg-[#050c1a]" : "bg-white"}`} dir="rtl">
+    <main className={`min-h-screen transition-colors duration-300 overflow-x-hidden ${isDark ? "bg-[#050c1a]" : "bg-white"} scroll-smooth`} dir="rtl">
       
       {/* زر الوضع الليلي */}
-      <button onClick={() => setIsDark(!isDark)} className="fixed left-4 md:left-6 top-1/2 -translate-y-1/2 z-[100] bg-[#2358af] text-white p-2 md:p-3 rounded-2xl shadow-2xl hover:bg-yellow-500 transition-all active:scale-90">
-        {isDark ? <Sun size={24} /> : <Moon size={24} />}
+      <button onClick={() => setIsDark(!isDark)} className="fixed left-4 md:left-6 top-1/2 -translate-y-1/2 z-[100] bg-[#2358af] text-white p-2 md:p-3 rounded-xl shadow-2xl active:scale-90 transition-transform">
+        {isDark ? <Sun size={20} /> : <Moon size={20} />}
       </button>
 
       {/* شريط التنقل */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? (isDark ? "bg-[#050c1a]/95 backdrop-blur shadow-2xl py-3" : "bg-white shadow-xl py-3") : "bg-transparent py-5 md:py-7"}`}>
+      <nav className={`fixed top-0 w-full z-50 transition-all ${isScrolled ? (isDark ? "bg-[#050c1a]/95 backdrop-blur py-2 shadow-lg" : "bg-white/95 backdrop-blur py-2 shadow-md") : "bg-transparent py-4"}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
-          <div className="flex items-center gap-2 md:gap-3 shrink-0">
-            {/* اللوقو */}
-            <div className="w-9 h-9 md:w-11 md:h-11 bg-[#2358af] rounded-xl flex items-center justify-center text-white shadow-lg overflow-hidden border border-white/10">
-              <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display='none'; }} />
-              <Cpu size={22} className="absolute" />
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="w-9 h-9 md:w-11 md:h-11 bg-[#2358af] rounded-lg flex items-center justify-center text-white relative">
+              <Cpu size={22} />
             </div>
-            <span className={`text-xl md:text-2xl font-black transition-colors ${navColor}`}>أمان تيك</span>
+            <span className={`text-xl md:text-2xl font-black ${navColor}`}>أمان تيك</span>
           </div>
-          <div className="hidden lg:flex items-center gap-8 xl:gap-12">
-            {navLinks.map((link) => (
-              <a key={link.name} href={link.id} className={`font-bold text-base xl:text-lg transition-all hover:scale-110 hover:text-yellow-500 ${navColor}`}>{link.name}</a>
+          
+          <div className="hidden lg:flex items-center gap-8 text-lg">
+            {["الرئيسية", "من نحن", "الخدمات", "تواصل معنا"].map((item, idx) => (
+              <a key={item} href={`#${['home', 'about', 'services', 'contact'][idx]}`} className={`font-bold transition-colors hover:text-yellow-500 ${navColor}`}>{item}</a>
             ))}
           </div>
-          <div className="flex items-center gap-4 md:gap-6">
-            <div className="hidden sm:flex items-center gap-4 md:gap-6">
-              <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className={`transition-all hover:scale-125 hover:text-[#1877f2] ${navColor}`}><Facebook size={26} /></a>
-              <div onClick={() => window.open(`https://wa.me/${myPhoneNumber}`, "_blank")} className={`cursor-pointer transition-all hover:scale-125 hover:text-[#25d366] ${navColor}`}><WhatsAppIcon className="w-7 h-7" /></div>
+
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-4">
+              <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className={navColor}><Facebook size={24} /></a>
+              <button onClick={() => window.open(`https://wa.me/${myPhoneNumber}`, "_blank")} className={navColor} aria-label="WhatsApp"><WhatsAppIcon className="w-6 h-6" /></button>
             </div>
-            <button className={`lg:hidden p-2 rounded-lg ${navColor}`} onClick={() => setIsOpen(!isOpen)}>{isOpen ? <X size={30} /> : <Menu size={30} />}</button>
+            <button className={`lg:hidden ${navColor}`} onClick={() => setIsOpen(!isOpen)}>{isOpen ? <X size={28} /> : <Menu size={28} />}</button>
           </div>
         </div>
+        
+        {isOpen && (
+          <div className="lg:hidden absolute top-full w-full bg-white dark:bg-[#050c1a] border-b border-gray-200 dark:border-gray-800 p-6 flex flex-col gap-4 text-center">
+            {["الرئيسية", "من نحن", "الخدمات", "تواصل معنا"].map((item, idx) => (
+              <a key={item} href={`#${['home', 'about', 'services', 'contact'][idx]}`} onClick={() => setIsOpen(false)} className="font-bold text-[#2358af] dark:text-white">{item}</a>
+            ))}
+          </div>
+        )}
       </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="relative h-screen w-full flex items-center justify-center px-4">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070')" }}>
-          <div className={`absolute inset-0 transition-all duration-700 ${isDark ? "bg-[#050c1a]/95" : "bg-[#050c1a]/80"}`}></div>
+      {/* الواجهة الرئيسية */}
+      <section id="home" className="relative h-[100svh] w-full flex items-center justify-center px-4 text-center">
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=60&w=1200')" }}>
+          <div className={`absolute inset-0 ${isDark ? "bg-[#050c1a]/90" : "bg-[#050c1a]/70"}`}></div>
         </div>
-        <div className="relative z-10 text-center text-white w-full max-w-5xl">
-          <motion.h1 initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black mb-6 tracking-tighter drop-shadow-2xl uppercase">Aman Tech</motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-lg sm:text-xl md:text-3xl font-medium max-w-3xl mx-auto border-t border-white/20 pt-6 px-4">نحن نبني البنية التحتية لمستقبلك الرقمي بحلول تقنية متكاملة.</motion.p>
-        </div>
-      </section>
-
-      {/* قسم من نحن */}
-      <section id="about" className={`py-32 transition-colors duration-500 overflow-hidden ${isDark ? "bg-[#050c1a]" : "bg-white"}`}>
-        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center text-center">
-          <motion.div initial={{ scale: 0, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: false, amount: 0.3 }} transition={{ type: "spring", stiffness: 100, damping: 15, duration: 0.8 }} className="w-24 h-24 md:w-36 md:h-36 bg-[#2358af] rounded-3xl flex items-center justify-center text-white shadow-2xl">
-            <Cpu size={60} />
-          </motion.div>
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.3, duration: 0.8 }} className="mt-12">
-            <h2 className={`text-4xl md:text-6xl font-black mb-8 ${isDark ? "text-white" : "text-[#2358af]"}`}>من نحن</h2>
-            <p className={`text-xl md:text-3xl font-bold max-w-4xl leading-relaxed ${isDark ? "text-slate-300" : "text-[#2358af]"}`}>شركة أمان تيك هي شريكك الموثوق في ليبيا لتوفير حلول الشبكات المتطورة، صيانة الأنظمة، وتقنيات المعلومات الحديثة.</p>
-          </motion.div>
+        <div className="relative z-10 text-white">
+          <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-5xl md:text-9xl font-black mb-4 uppercase tracking-tighter">Aman Tech</motion.h1>
+          <p className="text-xl md:text-3xl font-medium max-w-2xl mx-auto opacity-90 leading-relaxed">بنية تحتية قوية لمستقبلك الرقمي.</p>
         </div>
       </section>
 
-      {/* قسم الخدمات */}
-      <section id="services" className={`py-24 transition-colors duration-500 ${isDark ? "bg-[#050c1a]" : "bg-[#2358af]"}`}>
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} className="text-white text-4xl md:text-6xl font-black text-center mb-20 uppercase tracking-widest">خدماتنا</motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ duration: 0.8, delay: index * 0.1 }} whileHover={{ scale: 1.05 }} className={`p-10 rounded-[2.5rem] flex flex-col items-center text-center border-4 ${isDark ? "bg-[#2358af]/10 border-[#2358af]" : "bg-[#2358af] border-white shadow-xl"}`}>
-                <div className={`mb-8 p-5 rounded-2xl ${isDark ? "text-white bg-[#2358af]" : "text-[#2358af] bg-white"}`}>{service.icon}</div>
-                <h3 className="text-white text-2xl font-bold mb-5 uppercase leading-tight">{service.title}</h3>
-                <p className="text-white/90 text-lg font-medium leading-relaxed">{service.desc}</p>
-              </motion.div>
-            ))}
+      {/* من نحن */}
+      <section id="about" className="py-24 px-6 text-center">
+        <div className="max-w-7xl mx-auto">
+          <div className="w-20 h-20 md:w-32 md:h-32 bg-[#2358af] rounded-3xl mx-auto flex items-center justify-center text-white mb-8 shadow-xl">
+            <Cpu size={50} />
           </div>
+          <h2 className={`text-4xl md:text-6xl font-black mb-6 ${isDark ? "text-white" : "text-[#2358af]"}`}>من نحن</h2>
+          <p className={`text-xl md:text-3xl font-bold max-w-4xl mx-auto leading-relaxed ${isDark ? "text-slate-300" : "text-[#2358af]"}`}>شركة أمان تيك هي شريكك الموثوق في ليبيا لتوفير حلول الشبكات وصيانة الأنظمة الحديثة.</p>
         </div>
       </section>
 
-      {/* قسم تواصل معنا المطور */}
-      <section id="contact" className={`py-24 transition-colors duration-500 ${isDark ? "bg-[#050c1a]" : "bg-white"}`}>
-        <div className="max-w-4xl mx-auto px-6">
-          <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} className={`text-4xl md:text-6xl font-black text-center mb-16 uppercase ${isDark ? "text-white" : "text-[#2358af]"}`}>تواصل معنا</motion.h2>
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}>
-            <form onSubmit={handleWhatsAppSend} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input required type="text" placeholder="الاسم الكامل" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className={`w-full p-5 rounded-2xl outline-none font-bold transition-all border-4 ${isDark ? "bg-[#050c1a] border-white text-white placeholder-white/40" : "bg-white border-[#2358af] text-[#2358af] placeholder-[#2358af]/60"}`} />
-                <input required type="email" placeholder="البريد الإلكتروني" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className={`w-full p-5 rounded-2xl outline-none font-bold transition-all border-4 ${isDark ? "bg-[#050c1a] border-white text-white placeholder-white/40" : "bg-white border-[#2358af] text-[#2358af] placeholder-[#2358af]/60"}`} />
-              </div>
-              <input required type="text" placeholder="الموضوع" value={formData.subject} onChange={(e) => setFormData({...formData, subject: e.target.value})} className={`w-full p-5 rounded-2xl outline-none font-bold transition-all border-4 ${isDark ? "bg-[#050c1a] border-white text-white placeholder-white/40" : "bg-white border-[#2358af] text-[#2358af] placeholder-[#2358af]/60"}`} />
-              <textarea required placeholder="رسالتك هنا..." rows={5} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} className={`w-full p-5 rounded-2xl outline-none font-bold resize-none transition-all border-4 ${isDark ? "bg-[#050c1a] border-white text-white placeholder-white/40" : "bg-white border-[#2358af] text-[#2358af] placeholder-[#2358af]/60"}`}></textarea>
-              <motion.button type="submit" whileHover={{ scale: 1.05 }} className={`group w-full py-6 rounded-2xl shadow-xl border-4 transition-all active:scale-95 ${isDark ? "bg-[#050c1a] border-white" : "bg-white border-[#2358af]"}`}>
-                <span className={`text-xl font-black transition-colors uppercase ${isDark ? "text-white group-hover:text-yellow-400" : "text-[#2358af] group-hover:text-yellow-600"}`}>إرسال عبر واتساب</span>
-              </motion.button>
-            </form>
-          </motion.div>
+      {/* الخدمات */}
+      <section id="services" className={`py-20 px-4 ${isDark ? "bg-[#081225]" : "bg-[#2358af]"}`}>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { t: "تركيب الشبكات", i: <Network /> },
+            { t: "صيانة الأنظمة", i: <Settings /> },
+            { t: "الأمن السيبراني", i: <Shield /> },
+            { t: "استشارات تقنية", i: <Lightbulb /> }
+          ].map((s, i) => (
+            <div key={i} className="p-10 rounded-[2.5rem] border border-white/10 bg-white/5 text-white text-center flex flex-col items-center hover:scale-105 transition-transform cursor-default">
+              <div className="mb-6 bg-white text-[#2358af] p-4 rounded-2xl shadow-lg">{s.i}</div>
+              <h3 className="text-2xl font-black">{s.t}</h3>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* الفوتر */}
-      <footer className={`py-12 text-center border-t-8 transition-colors duration-500 ${isDark ? "bg-[#050c1a] border-white/10 text-white/40" : "bg-white border-[#2358af] text-[#2358af]"}`}>
-        <div className="max-w-7xl mx-auto px-6">
-          <p className="text-xl font-black">جميع الحقوق محفوظة 2026 AmanTech</p>
+      {/* التواصل */}
+      <section id="contact" className="py-24 px-4">
+        <div className="max-w-3xl mx-auto">
+          <h2 className={`text-4xl md:text-6xl font-black text-center mb-16 ${isDark ? "text-white" : "text-[#2358af]"}`}>تواصل معنا</h2>
+          <form onSubmit={handleWhatsAppSend} className="grid gap-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <input required placeholder="الاسم" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="p-5 rounded-2xl border-4 border-[#2358af] bg-transparent outline-none dark:text-white font-bold" />
+              <input required type="email" placeholder="الايميل" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="p-5 rounded-2xl border-4 border-[#2358af] bg-transparent outline-none dark:text-white font-bold" />
+            </div>
+            <textarea required placeholder="رسالتك..." rows={5} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} className="p-5 rounded-2xl border-4 border-[#2358af] bg-transparent outline-none dark:text-white font-bold resize-none"></textarea>
+            <button type="submit" className="py-5 rounded-2xl bg-[#2358af] text-white font-black text-xl hover:bg-yellow-500 transition-all active:scale-95 shadow-2xl">إرسال عبر واتساب</button>
+          </form>
         </div>
+      </section>
+
+      <footer className="py-12 text-center border-t-8 border-[#2358af]/10 opacity-60 dark:text-white">
+        <p className="text-lg font-black tracking-widest uppercase">© 2026 AmanTech - Misrata, Libya</p>
       </footer>
     </main>
   );
